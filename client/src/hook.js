@@ -47,7 +47,7 @@ export function useApp() {
       formData.append('image', image);
       formData.append('quality', 50);
 
-      const axiosRequest = axios.post('http://tibodct.pythonanywhere.com/compress', formData, {
+      const axiosRequest = axios.post('http://127.0.0.1:5000/compress', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
