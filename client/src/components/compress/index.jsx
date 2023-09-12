@@ -1,6 +1,15 @@
 import React from 'react';
 import { Tooltip } from 'react-tooltip';
 
+Number.prototype.toKB = function () {
+  const kb = this / 1024;
+  return kb.toFixed(2); // Round to 2 decimal places
+};
+
+Number.prototype.toMB = function () {
+  return (this / (1024 * 1024)).toFixed(2);
+};
+
 const Compress = ({
   open,
   compres,
@@ -43,11 +52,6 @@ const Compress = ({
 
     return result;
   }
-
-  Number.prototype.toKB = function () {
-    const kb = this / 1024;
-    return kb.toFixed(2); // Round to 2 decimal places
-  };
 
   return (
     <div className="w-full h-auto lg:h-[90vh] flex flex-col lg:flex-row">
@@ -186,8 +190,12 @@ const Compress = ({
                 </div>
               ))}
               <div className="font-semibold text-custom-gray21">
-                <p>{`Ukuran Awal : ${totalBefore(response).toKB()} kb`}</p>
-                <p>{`Ukuran hasil : ${totalAfter(response).toKB()} kb`}</p>
+                <p>{`Ukuran Awal : ${
+                  totalBefore(response).toMB() >= 1 ? totalBefore(response).toMB() + ' mb' : totalBefore(response).toKB() + ' kb'
+                }`}</p>
+                <p>{`Ukuran hasil : ${
+                  totalAfter(response).toMB() >= 1 ? totalAfter(response).toMB() + ' mb' : totalAfter(response).toKB() + ' kb'
+                }`}</p>
                 <p>{`Terkompres : ${totalResult(response)}%`}</p>
               </div>
             </>
