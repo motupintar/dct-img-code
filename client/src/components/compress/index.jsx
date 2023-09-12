@@ -44,6 +44,11 @@ const Compress = ({
     return result;
   }
 
+  Number.prototype.toKB = function () {
+    const kb = this / 1024;
+    return kb.toFixed(2); // Round to 2 decimal places
+  };
+
   return (
     <div className="w-full h-auto lg:h-[90vh] flex flex-col lg:flex-row">
       <div className="w-full lg:w-2/3 py-6 px-10 h-auto lg:h-[90vh] lg:overflow-y-scroll">
@@ -100,7 +105,7 @@ const Compress = ({
                 </div>
                 <div className="font-medium text-sm text-custom-gray21 w-full pt-2">
                   <p className="w-full truncate">{`Nama file : ${file.name}`}</p>
-                  <p className="w-full truncate">{`Ukuran File : ${file.size} bytes`}</p>
+                  <p className="w-full truncate">{`Ukuran File : ${file.size.toKB()} kb`}</p>
                 </div>
               </div>
             ))}
@@ -136,7 +141,7 @@ const Compress = ({
                   </div>
                   <div className="px-4">
                     <p className="w-full truncate">{`Nama file : ${it.name}`}</p>
-                    <p className="w-full truncate">{`Ukuran File : ${it.size} bytes`}</p>
+                    <p className="w-full truncate">{`Ukuran File : ${it.size.toKB()} kb`}</p>
                   </div>
                 </div>
               </div>
@@ -181,8 +186,8 @@ const Compress = ({
                 </div>
               ))}
               <div className="font-semibold text-custom-gray21">
-                <p>{`Ukuran Awal : ${totalBefore(response)} bytes`}</p>
-                <p>{`Ukuran hasil : ${totalAfter(response)} bytes`}</p>
+                <p>{`Ukuran Awal : ${totalBefore(response).toKB()} kb`}</p>
+                <p>{`Ukuran hasil : ${totalAfter(response).toKB()} kb`}</p>
                 <p>{`Terkompres : ${totalResult(response)}%`}</p>
               </div>
             </>

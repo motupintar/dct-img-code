@@ -40,20 +40,29 @@ export function useApp() {
 
   async function compres() {
     setLoading(true);
-    const formData = new FormData();
-    for (const image of selected) {
-      formData.append('image', image);
-    }
-    formData.append('quality', 75);
 
-    try {
-      const response = await axios.post('http://127.0.0.1:5000/compress', formData, {
+    const axiosRequests = [];
+    for (const image of selected) {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('quality', 50);
+
+      const axiosRequest = axios.post('http://tibodct.pythonanywhere.com/compress', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      setResponse(response.data);
+      axiosRequests.push(axiosRequest);
+    }
+
+    try {
+      const responses = await Promise.all(axiosRequests);
+
+      console.log({ responses });
+
+      const responseData = responses.map((response) => response.data[0]);
+      setResponse(responseData);
       setLoading(false);
       toastSuccess({ title: 'Success', message: 'Berhasil mengompres gambar' });
     } catch (error) {
