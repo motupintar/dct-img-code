@@ -47,31 +47,28 @@ export function useApp() {
       formData.append('image', image);
       formData.append('quality', 50);
 
-      const axiosRequest = axios.post('http://127.0.0.1:5000/compress', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const axiosRequest = axios
+        .post('http://127.0.0.1:5000/compress', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          setResponse((prev) => [...prev, response.data[0]]);
+          toastSuccess({ title: 'Berhasil', message: `Berhasil mengompres ${image.name}` });
+        })
+        .catch(() => {
+          toastError({
+            title: 'Maaf',
+            message: `Terjadi kesalahan saat mengompres ${image.name}`,
+          });
+        });
 
       axiosRequests.push(axiosRequest);
     }
 
-    try {
-      const responses = await Promise.all(axiosRequests);
-
-      console.log({ responses });
-
-      const responseData = responses.map((response) => response.data[0]);
-      setResponse(responseData);
-      setLoading(false);
-      toastSuccess({ title: 'Success', message: 'Berhasil mengompres gambar' });
-    } catch (error) {
-      setLoading(false);
-      toastError({
-        title: 'Sorry',
-        message: 'An error occoured on the server when handling your request',
-      });
-    }
+    await Promise.all(axiosRequests);
+    setLoading(false);
   }
 
   function getFileNameWithoutExtension(fileName) {
